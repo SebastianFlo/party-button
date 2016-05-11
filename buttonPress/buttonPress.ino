@@ -1,3 +1,6 @@
+#include <RCSwitch.h>
+RCSwitch mySwitch = RCSwitch();
+
 int inPin = 7;  // the pin number for input (for me a push button)
 int ledPin = 13; 
 
@@ -9,9 +12,19 @@ long prev_secs_held; // How long the button was held in the previous check
 byte previous = HIGH;
 unsigned long firstTime; // how long since the button was first pressed 
 
+//Radio Codes
+/////////////
+
+//A Button
+char A_Button_On[] = "00000FFF0F0F";
+char A_Button_Off[] = "00000FFF0F0F";
 
 void setup() {
   Serial.begin(9600);         // Use serial for debugging
+  
+  // Transmitter is connected to Arduino Pin #10  
+  mySwitch.enableTransmit(10);
+  
   pinMode(ledPin, OUTPUT);
   digitalWrite(inPin, HIGH);  // Turn on 20k pullup resistors to simplify switch input
 }
@@ -42,11 +55,13 @@ void loop() {
 
       // Button pressed for less than 6 seconds, turn on.
       if (secs_held < 6) {
-          Serial.print("Short Press: ");
+        Serial.print("Short Press: ");
         Serial.print(secs_held);
         Serial.print("   Milliseconds held: ");
         Serial.println(millis_held);
         ledblink(10,200,ledPin); 
+        //Turn on sockets
+        turnSocketsOn();
       }
 
       // Button held for more than 6 seconds, turn off.
@@ -55,6 +70,8 @@ void loop() {
         Serial.print(secs_held);
         Serial.print("   Milliseconds held: ");
         Serial.println(millis_held);
+        //Turn off sockets
+        turnSocketsOff();
       }
       // ===============================================================================
     }
@@ -72,4 +89,15 @@ void ledblink(int times, int lengthms, int pinnum){
     digitalWrite(pinnum, LOW);
     delay(lengthms);
   }
+}
+
+//Function to send a radio signal to turn sockets on
+void turnSocketsOn() {
+  mySwitch.sendTriState(A_Button_On);
+  // Send ON signal to PI 
+}
+//Function to send a radio signal to turn sockets off
+void turnSocketsOff() {
+  mySwitch.sendTriState(A_Button_Off);
+  // Send OFF signal to PI
 }
