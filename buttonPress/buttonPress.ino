@@ -16,8 +16,8 @@ unsigned long firstTime; // how long since the button was first pressed
 /////////////
 
 //A Button
-char A_Button_On[] = "00000FFF0F0F";
-char A_Button_Off[] = "00000FFF0F0F";
+char A_Button_On[] = "0FFF0F0FFF0F";
+char A_Button_Off[] = "0FFF0F0FFFF0";
 
 void setup() {
   Serial.begin(9600);         // Use serial for debugging
@@ -59,7 +59,6 @@ void loop() {
         Serial.print(secs_held);
         Serial.print("   Milliseconds held: ");
         Serial.println(millis_held);
-        ledblink(10,200,ledPin); 
         //Turn on sockets
         turnSocketsOn();
       }
@@ -93,11 +92,19 @@ void ledblink(int times, int lengthms, int pinnum){
 
 //Function to send a radio signal to turn sockets on
 void turnSocketsOn() {
+  //  delay
+  delay(2000);
+  Serial.print("Turning sockets on: ");
+  Serial.print(A_Button_On);
   mySwitch.sendTriState(A_Button_On);
+  delay(1000);
   // Send ON signal to PI 
 }
 //Function to send a radio signal to turn sockets off
 void turnSocketsOff() {
+  Serial.print("Turning sockets off: ");
+  Serial.print(A_Button_Off);
   mySwitch.sendTriState(A_Button_Off);
+  delay(1000);
   // Send OFF signal to PI
 }
