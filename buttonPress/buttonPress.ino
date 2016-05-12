@@ -92,18 +92,22 @@ void ledblink(int times, int lengthms, int pinnum){
 
 //Function to send a radio signal to turn sockets on
 void turnSocketsOn() {
+  // For RPi parsing
+  Serial.println("status : 1");
   //  delay
   delay(2000);
   Serial.print("Turning sockets on: ");
-  Serial.print(A_Button_On);
+  Serial.println(A_Button_On);
   mySwitch.sendTriState(A_Button_On);
   delay(1000);
   // Send ON signal to PI 
 }
 //Function to send a radio signal to turn sockets off
 void turnSocketsOff() {
+  // For RPi parsing
+  Serial.println("status : 0");
   Serial.print("Turning sockets off: ");
-  Serial.print(A_Button_Off);
+  Serial.println(A_Button_Off);
   mySwitch.sendTriState(A_Button_Off);
   delay(1000);
   // Send OFF signal to PI
