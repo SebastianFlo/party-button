@@ -31,5 +31,5 @@ while 1:
             if not mode:
                 print("Mode is off: %s" % mode)
                 # os.system("pkill " + browserExe)
-		os.system("kill -9 " + browserExe) 
+		os.system("pkill " + browserExe) 
             previousMode = mode
